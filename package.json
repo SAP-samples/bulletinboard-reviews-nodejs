@@ -5,9 +5,9 @@
   "main": "main.js",
   "scripts": {
     "start": "node js/main.js",
-    "start:debug": "node --debug-brk --inspect js/main.js",
+    "start:debug": "node --inspect-brk js/main.js",
     "test": "node_modules/mocha/bin/mocha",
-    "test:debug": "node --debug-brk --inspect node_modules/mocha/bin/mocha.js -i"
+    "test:debug": "node_modules/mocha/bin/mocha --inspect-brk"
   },
   "engines": {
     "node": "6.9.x"
