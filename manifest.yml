@@ -2,7 +2,10 @@
 applications:
 - name: bulletinboard-reviews
   memory: 80MB
-  buildpacks: 
+  command: npm start
+  routes: 
+    - route: bulletinboard-reviews-cnb.cfapps.sap.hana.ondemand.com
+  buildpacks:
     - https://github.com/cloudfoundry/nodejs-buildpack
   services:
     - postgres-bulletinboard-reviews

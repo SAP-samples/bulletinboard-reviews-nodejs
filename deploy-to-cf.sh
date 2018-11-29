@@ -1,4 +1,4 @@
 #!/bin/sh
-cf target -o cloudrefapp -s bootcamp-team-X
+cf target -o cloudcourse -s cloud-native-bootcamp
 cf create-service postgresql v9.6-dev postgres-bulletinboard-reviews
-cf push -n bulletinboard-reviews
+cf push
