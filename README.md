@@ -8,7 +8,6 @@ Use the script `run-locally <script>`. Supply the script defined in package.json
 ## How to work in the cloud
 
 Use script `deploy-to-cf.sh`.
-**Important:** Please alter the `deploy-to-cf.sh` script or the `manifest.yml` in order to provide a unique host name (e.g. your team name).
 
 ## API
 
