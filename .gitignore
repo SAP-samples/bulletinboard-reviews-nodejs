@@ -1,0 +1,16 @@
+# OS
+.DS_Store
+thumbs.db
+
+# Node
+*.log
+npm-debug.log
+node_modules
+
+# Eclipse
+.classpath
+.project
+.settings
+
+# Visual Studio Code
+.vscode
