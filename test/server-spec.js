@@ -19,7 +19,8 @@ describe('Server', function() {
         await baseUrl.delete('/api/v1/reviews').expect(204)
     })
 
-    after(function() {
+    after(async function() {
+//        await baseUrl.delete('/api/v1/reviews').expect(204)
         server.stop()
     })
 
@@ -53,6 +54,65 @@ describe('Server', function() {
             assert.equal(reviews[0].reviewer_email, "frank.foe@other.org")
             assert.equal(reviews[0].rating, 0)
             assert.equal(reviews[0].comment, "d'oh")
+        })
+    })
+
+    it('should respond with 404 if average_rating_all not enabled', async function() {
+        var oldFlag=process.env.ALL_RATINGS_ENABLED
+        process.env.ALL_RATINGS_ENABLED='false'
+
+        //need to stop and re-start the server so that the changed flag gets evaluated
+        await server.stop()
+        server = new ExpressServer(new PostgresReviewsService(DB_CONNECTION_URI))
+        server.start(PORT)
+
+        await baseUrl.get('/api/v1/averageRatings').expect(404)
+
+        //reset the flag and re-start the server so the flag gets evaluated again
+        process.env.ALL_RATINGS_ENABLED=oldFlag
+        await server.stop()
+        server = new ExpressServer(new PostgresReviewsService(DB_CONNECTION_URI))
+        server.start(PORT)
+    })
+
+    it('should respond with the ratings of users sorted by average rating', async function() {
+
+        await baseUrl.post('/api/v1/reviews').send({
+            "reviewee_email": "user1@some.org",
+            "reviewer_email": "frank.foe@other.org",
+            "rating": 0,
+            "comment": "d'oh"
+        }).expect(201)
+        await baseUrl.post('/api/v1/reviews').send({
+            "reviewee_email": "user1@some.org",
+            "reviewer_email": "someotheruser@other.org",
+            "rating": 5,
+            "comment": "d'oh"
+        }).expect(201)
+        await baseUrl.post('/api/v1/reviews').send({
+            "reviewee_email": "user2@some.org",
+            "reviewer_email": "frank.foe1@other.org",
+            "rating": 2,
+            "comment": "ok ok"
+        }).expect(201)
+        await baseUrl.post('/api/v1/reviews').send({
+            "reviewee_email": "user3@some.org",
+            "reviewer_email": "frank.foe2@other.org",
+            "rating": 3,
+            "comment": "ok"
+        }).expect(201)
+
+        await baseUrl.get('/api/v1/averageRatings').expect(200).then(function (response) {
+            var reviews = response.body
+            assert.equal(reviews.length, 3)
+            assert.equal(reviews[0].reviewee_email, "user3@some.org")
+            assert.equal(reviews[0].average_rating, 3)
+
+            assert.equal(reviews[1].reviewee_email, "user1@some.org")
+            assert.equal(reviews[1].average_rating, 2.5)
+
+            assert.equal(reviews[2].reviewee_email, "user2@some.org")
+            assert.equal(reviews[2].average_rating, 2)
         })
     })
 

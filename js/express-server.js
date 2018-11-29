@@ -21,6 +21,14 @@ function ExpressServer(reviewsService) {
 		res.send(result)
 	})
 
+    console.log(process.env.ALL_RATINGS_ENABLED)
+    if (process.env.ALL_RATINGS_ENABLED == 'true') {
+	    app.get('/api/v1/averageRatings', async function getAverageUserRatings(req, res) {
+		    var result = await reviewsService.getAverageRatings()
+            res.send(result)
+	    })
+    }
+
 	app.post('/api/v1/reviews', async function create(req, res) {
 		await reviewsService.create(req.body)
 		res.status(HTTP_CREATED).location(req.body.component_name).end()

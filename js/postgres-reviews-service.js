@@ -22,6 +22,11 @@ function PostgresReviewsService(dbConnectionUri) {
         return result.rows[0]
     }
 
+    this.getAverageRatings = async function() {
+        var result = await pool.query(`select avg(rating) as "average_rating", "reviewee_email" from "reviews" group by "reviewee_email" order by "average_rating" desc`)
+        return result.rows
+    }
+
     this.create = async function(review) {
         await tableInitialized
         const query = 'insert into "reviews" ("reviewee_email", "reviewer_email", "rating", "comment") values ($1, $2, $3, $4)'
