@@ -1,4 +1,5 @@
 # bulletinboard-reviews
+This is the reviews service of the bulletin board. It doesn't have a GUI at this point, however you can interact with it using a REST client like Postman.
 
 ## How to work locally
 
