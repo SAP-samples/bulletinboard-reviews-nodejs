@@ -1,4 +1,4 @@
-#!/bin/sh -e
+nodwe#!/bin/sh -e
 
 if [ "$#" -ne 1 ]
 then
