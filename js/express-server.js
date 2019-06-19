@@ -21,14 +21,6 @@ function ExpressServer(reviewsService) {
 		res.send(result)
 	})
 
-    console.log(process.env.ALL_RATINGS_ENABLED)
-    if (process.env.ALL_RATINGS_ENABLED == 'true') {
-	    app.get('/api/v1/averageRatings', async function getAverageUserRatings(req, res) {
-		    var result = await reviewsService.getAverageRatings()
-            res.send(result)
-	    })
-    }
-
 	app.post('/api/v1/reviews', async function create(req, res) {
 		await reviewsService.create(req.body)
 		res.status(HTTP_CREATED).location(req.body.component_name).end()
@@ -39,13 +31,13 @@ function ExpressServer(reviewsService) {
 		res.status(HTTP_NO_CONTENT).end()
 	})
 
-	this.start = function(port) {
+	this.start = function (port) {
 		//REVISE are we listening to early - what if the DB is not yet connected?
 		httpServer = app.listen(port)
 		console.log(`Server started on port ${port}`)
 	}
 
-	this.stop = async function() {
+	this.stop = async function () {
 		await reviewsService.stop()
 		httpServer.close()
 	}
