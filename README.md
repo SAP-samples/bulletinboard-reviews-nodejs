@@ -3,7 +3,7 @@ This is the reviews service of the bulletin board. It doesn't have a GUI at this
 
 ## How to work locally
 
-Use the script `run-locally <script>`. Supply the script defined in package.json, e.g. `start` to start the server, `start:debug` to run the server in debug mode, `test` to execute the tests and `test:debug` to run the tests in debug mode.
+Use the script `run-db.sh` to start your local postgres DB instance. Afterwards, you can run `start-app-locally.sh` to start your local API endpoint. Optionally, you can add the parameter `debug` in order to start your local server in debug mode.
 
 ## How to work in the cloud
 
