@@ -1,4 +1,4 @@
-var assert = require('assert')
+const assert = require('assert')
 const PostgresReviewsService = require('../js/postgres-reviews-service')
 const ExpressServer = require('../js/express-server')
 const request = require('supertest');
@@ -9,8 +9,8 @@ const PORT = process.env.PORT
 
 describe('Server', function () {
 
-    var server
-    var baseUrl
+    let server
+    let baseUrl
 
     before(async function () {
         server = new ExpressServer(new PostgresReviewsService(DB_CONNECTION_URI))
@@ -32,7 +32,7 @@ describe('Server', function () {
         await baseUrl.get('/api/v1/reviews')
             .expect(200).expect('Content-Type', /application\/json/)
             .then(function (response) {
-                var reviews = response.body
+                const reviews = response.body
                 assert.equal(reviews.length, 0)
             })
     })
@@ -47,7 +47,7 @@ describe('Server', function () {
         }).expect(201)
 
         await baseUrl.get('/api/v1/reviews').expect(200).then(function (response) {
-            var reviews = response.body
+            const reviews = response.body
             assert.equal(reviews.length, 1)
             assert.equal(reviews[0].reviewee_email, "john.doe@some.org")
             assert.equal(reviews[0].reviewer_email, "frank.foe@other.org")
@@ -73,7 +73,7 @@ describe('Server', function () {
         }).expect(201)
 
         await baseUrl.get('/api/v1/averageRatings/john.doe@some.org').expect(200).then(function (response) {
-            var averageRating = response.body
+            const averageRating = response.body
             assert.equal(averageRating.average_rating, 2.5)
         })
     })

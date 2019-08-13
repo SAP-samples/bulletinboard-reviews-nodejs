@@ -7,17 +7,17 @@ const HTTP_CREATED = 201
 
 function ExpressServer(reviewsService) {
 
-	var httpServer
+	let httpServer
 	const app = express()
 	app.use(bodyParser.json())
 
 	app.get('/api/v1/reviews', async function readAll(req, res) {
-		var result = await reviewsService.getAll()
+		const result = await reviewsService.getAll()
 		res.send(result)
 	})
 
 	app.get('/api/v1/averageRatings/:email', async function getAverageUserRating(req, res) {
-		var result = await reviewsService.getAverageRating(req.params.email)
+		const result = await reviewsService.getAverageRating(req.params.email)
 		res.send(result)
 	})
 
