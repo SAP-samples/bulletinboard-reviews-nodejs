@@ -1,6 +1,6 @@
 'use strict'
 
-var pg = require('pg')
+const pg = require('pg')
 
 function PostgresReviewsService(dbConnectionUri) {
 
@@ -13,13 +13,13 @@ function PostgresReviewsService(dbConnectionUri) {
 
     this.getAll = async function () {
         await tableInitialized
-        var result = await pool.query('select * from "reviews"')
+        const result = await pool.query('select * from "reviews"')
         return result.rows
     }
 
     this.getAverageRating = async function (revieweeEmail) {
         await tableInitialized
-        var result = await pool.query(`select avg(rating) as "average_rating" from "reviews" where "reviewee_email" = '${revieweeEmail}'`)
+        const result = await pool.query(`select avg(rating) as "average_rating" from "reviews" where "reviewee_email" = '${revieweeEmail}'`)
         return result.rows[0]
     }
 
