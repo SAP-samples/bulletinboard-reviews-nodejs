@@ -5,6 +5,8 @@ This is the reviews service of the bulletin board. It doesn't have a GUI at this
 
 Use the script `run-db.sh` to start your local postgres DB instance. Afterwards, you can run `start-app-locally.sh` to start your local API endpoint. Optionally, you can add the parameter `debug` in order to start your local server in debug mode.
 
+The tests are executed with command `npm test`. Starting the test suite in debug mode is done similarly via command `npm run test:debug`.
+
 ## How to work in the cloud
 
 Use script `deploy-to-cf.sh`.
