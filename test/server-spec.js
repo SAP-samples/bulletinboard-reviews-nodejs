@@ -2,21 +2,15 @@ const assert = require('assert')
 const PostgresReviewsService = require('../js/postgres-reviews-service')
 const ExpressServer = require('../js/express-server')
 const request = require('supertest');
-const setupEnvironment = require('./setup-environment');
 
-
+const DB_CONNECTION_URI = 'postgres://postgres@localhost:6543/postgres';
+const PORT = 9090;
 
 describe('Server', function () {
-
     let server
     let baseUrl
 
     before(async function () {
-        setupEnvironment();
-        const VCAP_SERVICES = JSON.parse(process.env.VCAP_SERVICES)
-        const DB_CONNECTION_URI = VCAP_SERVICES.postgresql[0].credentials.uri
-        const PORT = process.env.PORT
-
         server = new ExpressServer(new PostgresReviewsService(DB_CONNECTION_URI))
         server.start(PORT)
         baseUrl = request(`http://localhost:${PORT}`)
