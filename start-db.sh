@@ -12,4 +12,6 @@ if [ $is_db_container_running = "false" ]
 then
     echo "Starting DB container"
     docker start postgres-bulletinboard-reviews
+else
+    echo "DB container already running"
 fi
