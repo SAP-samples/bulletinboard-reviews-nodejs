@@ -18,6 +18,12 @@ function ExpressServer(reviewsService) {
 		res.send(result)
 	})
 
+	app.get('/api/v1/reviews/:revieweeEmail', async function readAll(req, res) {
+		const revieweeEmail = req.params.revieweeEmail;
+		const result = await reviewsService.getAllFor(revieweeEmail)
+		res.send(result)
+	})
+
 	app.get('/api/v1/averageRatings/:email', async function getAverageUserRating(req, res) {
 		const result = await reviewsService.getAverageRating(req.params.email)
 		res.send(result)

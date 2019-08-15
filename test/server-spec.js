@@ -54,6 +54,29 @@ describe('Server', function () {
         })
     })
 
+    it('should respond with all reviews for a specific reviewee', async function () {
+        await baseUrl.post('/api/v1/reviews').send({
+            "reviewee_email": "john.doe@some.org",
+            "reviewer_email": "frank.foe@other.org",
+            "rating": 0,
+            "comment": "d'oh"
+        }).expect(201)
+
+        await baseUrl.post('/api/v1/reviews').send({
+            "reviewee_email": "jane.doe@some.org",
+            "reviewer_email": "jane.joe@acme.org",
+            "rating": 5,
+            "comment": "cool person"
+        }).expect(201)
+        await baseUrl.get('/api/v1/reviews/john.doe@some.org')
+            .expect(200).expect('Content-Type', /application\/json/)
+            .then(function (response) {
+                const reviews = response.body
+                assert.equal(reviews.length, 1)
+                assert.equal(reviews[0].reviewee_email, 'john.doe@some.org')
+        })
+    })
+
     it('should return average rating of 2.5 for two ratings of 0 and 5', async function () {
 
         await baseUrl.post('/api/v1/reviews').send({

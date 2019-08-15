@@ -17,6 +17,12 @@ function PostgresReviewsService(dbConnectionUri) {
         return result.rows
     }
 
+    this.getAllFor = async function (revieweeEmail) {
+        await tableInitialized
+        const result = await pool.query('select * from "reviews" where reviewee_email = $1', [revieweeEmail])
+        return result.rows
+    }
+
     this.getAverageRating = async function (revieweeEmail) {
         await tableInitialized
         const result = await pool.query(`select avg(rating) as "average_rating" from "reviews" where "reviewee_email" = '${revieweeEmail}'`)
