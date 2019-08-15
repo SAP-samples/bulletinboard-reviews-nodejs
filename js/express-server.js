@@ -11,6 +11,8 @@ function ExpressServer(reviewsService) {
 	const app = express()
 	app.use(bodyParser.json())
 
+	app.use(express.static('ui'));
+
 	app.get('/api/v1/reviews', async function readAll(req, res) {
 		const result = await reviewsService.getAll()
 		res.send(result)
