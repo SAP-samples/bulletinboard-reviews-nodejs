@@ -6,7 +6,7 @@
     xmlns:semantic="sap.m.semantic"
 	xmlns="sap.m">
 
-	<semantic:FullscreenPage title="Bulletin Board">
+	<semantic:FullscreenPage title="Bulletin Board Reviews">
 		<semantic:content>
 			<TileContainer id="AdTiles" tiles="{/value}" tileDelete="handleAdsDelete">
 				<StandardTile number="{price}" numberUnit="{currency}"

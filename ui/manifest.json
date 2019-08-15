@@ -5,7 +5,7 @@
         "type": "application",
         "resources": "resources.json",
         "i18n": "i18n/i18n.properties",
-        "title": "Bulletin Board",
+        "title": "Bulletin Board Reviews",
         "description": "Bulletin Board application for learning purpose",
         "applicationVersion": {
             "version": "1.0"
