@@ -44,10 +44,6 @@ sap.ui.define([
 				return this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			},
 
-			isLocalDevEnvironment : function() {
-				return this.getOwnerComponent().isLocalDevEnvironment();
-			},
-
 			getMainServiceURL : function() {
 				return this.getOwnerComponent().getMetadata().getManifestEntry("sap.app").dataSources["mainService"].uri;
 			}

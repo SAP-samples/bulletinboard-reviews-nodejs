@@ -51,19 +51,6 @@ sap.ui.define(["sap/ui/core/UIComponent", "sap/ui/Device"],
 					}
 				}
 				return this._sContentDensityClass;
-			},
-
-			/**
-			 * Checks if the app runs in a local dev/test environment (e.g. local
-			 * Tomcat). In that case, certain parts change the behavior a bit to
-			 * simplify local development, e.g. - provide initial fake ads for
-			 * easier testing, and - avoid sending data to the server because it
-			 * doesn't have the "users" service and thus cannot identify a "premium
-			 * user" which is required to accept "write" requests.
-			 */
-			isLocalDevEnvironment: function () {
-				return (document.domain == "localhost");
 			}
 		});
 	});
-	
