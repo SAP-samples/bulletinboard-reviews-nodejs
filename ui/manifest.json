@@ -3,7 +3,6 @@
     "sap.app": {
         "id": "sap.demo.bulletinboard",
         "type": "application",
-        "resources": "resources.json",
         "i18n": "i18n/i18n.properties",
         "title": "Bulletin Board Reviews",
         "description": "Bulletin Board application for learning purpose",
@@ -61,11 +60,7 @@
             "compact": true,
             "cozy": true
         },
-        "models": {
-            "": {
-                "dataSource": "mainService"
-            }
-        },
+        "models": {},
         "routing": {
             "config": {
                 "routerClass": "sap.m.routing.Router",
