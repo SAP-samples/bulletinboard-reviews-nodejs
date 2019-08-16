@@ -8,10 +8,18 @@
 
 	<semantic:FullscreenPage title="Bulletin Board Reviews">
 		<semantic:content>
-			<TileContainer id="AdTiles" tiles="{/value}" tileDelete="handleAdsDelete">
-				<StandardTile number="{price}" numberUnit="{currency}"
-					title="{title}" info="{contact}" infoState="{contactRatingState}" press="onSelectAd" />
-			</TileContainer>
+        <List
+            items="{/}"
+            id="reviewList"
+            growing="true"
+            growingThreshold="4"
+            growingScrollToLoad="false">
+            <StandardListItem
+                title="{reviewer_email}"
+                description="{comment}"
+                iconDensityAware="false"
+                iconInset="false" />
+        </List>
 		</semantic:content>
 
         <semantic:addAction>

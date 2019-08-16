@@ -6,6 +6,34 @@ sap.ui.define([
 
 	return BaseController.extend("sap.demo.bulletinboard.controller.Reviews", {
 
+		onInit : function () {
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.getRoute("main").attachPatternMatched(this._onRevieweeMatched, this);
+		},
+
+		_onRevieweeMatched : function (oEvent) {
+			var reviewee_email = oEvent.getParameter("arguments").reviewee_email;
+			
+
+			var oNewModel = new sap.ui.model.json.JSONModel();
+				oNewModel.attachRequestCompleted(function() {
+					this.getView().getModel().setData(oNewModel.getData(), false);
+					this.getView().byId("reviewList").setHeaderText("Revies for " + reviewee_email);
+				}, this);
+				oNewModel.loadData(this.getMainServiceURL()+'/reviews/' + reviewee_email);
+
+			// this.waitForModel(function () {
+			// 	console.log("fdfds")
+			// 	var aAllAds = this.getModel().getData()["value"];
+			// 	var iAdIndex = this._getAdIndexInModel(iAdId, aAllAds);
+			// 	this.byId("reviewList").setTitle("Neuer Title")
+			// 	this.getView().bindElement({
+			// 		path: "/value/" + iAdIndex
+			// 	});
+			// })
+			// this.updateModel(this.getMainServiceURL()+'/reviews/' + reviewee_email);
+		},
+
 		_getCategories : function() {
 			var aCategories = [];
 			var oModelData = this.getModel().getData()["value"];
@@ -74,7 +102,7 @@ sap.ui.define([
 			if (sCategory && sCategory.trim().length > 0) {
 				var oParams = { "category" : sCategory };
 			}
-			return this.updateModel(this.getMainServiceURL(), oParams);
+			return this.updateModel(this.getMainServiceURL()+'/reviews/marcel', oParams);
 		},
 		
 		handleAdsDelete : function(oEvent) {

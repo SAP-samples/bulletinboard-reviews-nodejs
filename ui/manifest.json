@@ -12,7 +12,7 @@
         },
         "dataSources": {
             "mainService": {
-                "uri": "api/v1/ads",
+                "uri": "api/v1",
                 "type": "JSON",
 				"settings": {
 					"localUri": "test/service"
@@ -81,7 +81,7 @@
 
             "routes": [
                 {
-                    "pattern": "",
+                    "pattern": "reviews/{reviewee_email}",
                     "name": "main",
                     "target": ["main"]
                 },
