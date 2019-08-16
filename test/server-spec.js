@@ -54,6 +54,22 @@ describe('Server', function () {
         })
     })
 
+    it('should respond with 409 - Conflict if there is already an entry from the same reviewer', async function () {
+        await baseUrl.post('/api/v1/reviews').send({
+            "reviewee_email": "john.doe@some.org",
+            "reviewer_email": "frank.foe@other.org",
+            "rating": 0,
+            "comment": "d'oh"
+        })
+
+        await baseUrl.post('/api/v1/reviews').send({
+            "reviewee_email": "john.doe@some.org",
+            "reviewer_email": "frank.foe@other.org",
+            "rating": 1,
+            "comment": "still not good"
+        }).expect(409)
+    })
+
     it('should respond with all reviews for a specific reviewee', async function () {
         await baseUrl.post('/api/v1/reviews').send({
             "reviewee_email": "john.doe@some.org",
