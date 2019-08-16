@@ -11,19 +11,18 @@ sap.ui.define([
 		},
 
 		_onRevieweeMatched : function (oEvent) {
-			var reviewee_email = oEvent.getParameter("arguments").reviewee_email;
-			
+			this.reviewee_email = oEvent.getParameter("arguments").reviewee_email;			
 
 			var oNewModel = new sap.ui.model.json.JSONModel();
 				oNewModel.attachRequestCompleted(function() {
 					this.getView().getModel().setData(oNewModel.getData(), false);
-					this.getView().byId("reviewList").setHeaderText("Reviews for " + reviewee_email);
+					this.getView().byId("reviewList").setHeaderText("Reviews for " + this.reviewee_email);
 				}, this);
-				oNewModel.loadData(this.getMainServiceURL()+'/reviews/' + reviewee_email);
+				oNewModel.loadData(this.getMainServiceURL()+'/reviews/' + this.reviewee_email);
 		},
 
-		onCreateAd : function() {
-			this.getRouter().navTo("createReview" , {reviewee_email: "bla"});
+		onCreateReview : function() {
+			this.getRouter().navTo("createReview" , {'reviewee_email': this.reviewee_email});
 		}
 	})
 });

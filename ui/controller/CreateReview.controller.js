@@ -8,8 +8,11 @@ sap.ui.define([
 	return BaseController.extend("sap.demo.bulletinboard.controller.CreateReview", {
 
 		onInit : function() {
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.getRoute("createReview").attachPatternMatched(this._onRevieweeMatched, this);
+
 			this._oDetailsModel = new JSONModel({});
-			this._initNewAdModel();
+			this._initNewReviewModel();
 			this.setModel(this._oDetailsModel, "reviewDetails");
 		},
 		
@@ -23,40 +26,45 @@ sap.ui.define([
 	
 		onSave : function() {
 			var reviewData = this._oDetailsModel.getData();
-			reviewData.reviewee_email = 'john.doe@some.org';
-			this.fetchCsrfToken(reviewData, this._postAd.bind(this), this._onNewAdCreated.bind(this));
+			reviewData.reviewee_email = this.reviewee_email;
+			this.fetchCsrfToken(reviewData, this._postReview.bind(this), this._onNewReviewCreated.bind(this));
+		},
+
+		_onRevieweeMatched: function (oEvent) {
+			this.reviewee_email = oEvent.getParameter("arguments").reviewee_email;
+			this.getView().byId("newReviewPage").setTitle("Create a new review for " + this.reviewee_email);
 		},
 		
-		_postAd : function(oNewAdForServer, sCsrfToken, fSuccess) {
+		_postReview : function(oNewReview, sCsrfToken, fSuccess) {
 			$.ajax({
 				method : "POST",
 				url: this.getMainServiceURL() + '/reviews',
-				data : JSON.stringify(oNewAdForServer),
+				data : JSON.stringify(oNewReview),
 				processData : false,
 				contentType : "application/json",
 				headers : { "x-csrf-token" : sCsrfToken }
 			})
-			.done(function(data, textStatus, oJqXHR) {fSuccess(oNewAdForServer, textStatus, oJqXHR)})
+			.done(function(data, textStatus, oJqXHR) {fSuccess(oNewReview, textStatus, oJqXHR)})
 			.fail( function(oJqXHR, sTextStatus, sErrorThrown) {
-					MessageToast.show("Failed to create your new ad.");
-					jQuery.sap.log.error("Failed to create new ad.", sErrorThrown);
+					MessageToast.show("Failed to create your new review.");
+					jQuery.sap.log.error("Failed to create new review.", sErrorThrown);
 	
 			});
 		},
 		
-		_initNewAdModel : function () {
+		_initNewReviewModel : function () {
 			this._oDetailsModel.setData({}, false);
 		},
 
-		_onNewAdCreated : function(oNewAdFromServer, sTextStatus, oJqXHR) {
-			MessageToast.show("Your new ad has been created with ID " + oNewAdFromServer.id + ".");
+		_onNewReviewCreated : function(oNewReview, sTextStatus, oJqXHR) {
+			MessageToast.show("Your new review has been created.");
 
 			// Reset model for new reviews so that the data of the created instance
 			// does not appear as initial data when creating another one.
-			this._initNewAdModel();
+			this._initNewReviewModel();
 			
 			// Go back to list of ads.
-			this.getRouter().navTo("main", {'reviewee_email': oNewAdFromServer.reviewee_email});
+			this.getRouter().navTo("main", {'reviewee_email': oNewReview.reviewee_email});
 		}
 	})
 });

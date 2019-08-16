@@ -86,7 +86,7 @@
                     "target": ["main"]
                 },
                 {
-                    "pattern": "NewAd/{reviewee_email}",
+                    "pattern": "NewReview/{reviewee_email}",
                     "name": "createReview",
                     "target": ["createReview"]
                 }

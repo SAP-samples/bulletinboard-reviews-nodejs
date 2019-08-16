@@ -12,8 +12,8 @@
             items="{/}"
             id="reviewList"
             growing="true"
-            growingThreshold="4"
-            growingScrollToLoad="false">
+            growingThreshold="10"
+            growingScrollToLoad="true">
             <items>
             <ObjectListItem
 					title="{reviewer_email}"
@@ -28,7 +28,7 @@
 		</semantic:content>
 
         <semantic:addAction>
-            <semantic:AddAction press="onCreateAd"/>
+            <semantic:AddAction press="onCreateReview"/>
         </semantic:addAction>
         
 	</semantic:FullscreenPage>
