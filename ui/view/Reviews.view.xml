@@ -34,11 +34,6 @@
         <semantic:addAction>
             <semantic:AddAction press="onCreateAd"/>
         </semantic:addAction>
-        <semantic:customFooterContent>
-            <!-- <Button text="Delete Ads" press="onDeleteAds"/> -->
-            <OverflowToolbarButton icon="sap-icon://delete" text="Delete Ads" press="onDeleteAds"/>
-            <OverflowToolbarButton icon="sap-icon://filter" text="Filter" press="onFilterAds"/>
-        </semantic:customFooterContent>
         
 	</semantic:FullscreenPage>
 </mvc:View>
