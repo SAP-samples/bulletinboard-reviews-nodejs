@@ -14,11 +14,20 @@
             growing="true"
             growingThreshold="4"
             growingScrollToLoad="false">
-            <StandardListItem
-                title="{reviewer_email}"
-                description="{comment}"
-                iconDensityAware="false"
-                iconInset="false" />
+            <items>
+            <ObjectListItem
+					title="{reviewer_email}"
+					number="{rating}">
+				<firstStatus>
+					<ObjectStatus
+						text="{Status}"
+						state="Success" />
+				</firstStatus>
+				<attributes>
+					<ObjectAttribute text="{comment}" />
+				</attributes>
+			</ObjectListItem>
+            </items>
         </List>
 		</semantic:content>
 
