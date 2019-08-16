@@ -27,7 +27,7 @@ sap.ui.define([
 		onSave : function() {
 			var reviewData = this._oDetailsModel.getData();
 			reviewData.reviewee_email = this.reviewee_email;
-			this.fetchCsrfToken(reviewData, this._postReview.bind(this), this._onNewReviewCreated.bind(this));
+			this._postReview(reviewData, this._onNewReviewCreated.bind(this));
 		},
 
 		_onRevieweeMatched: function (oEvent) {
@@ -35,14 +35,17 @@ sap.ui.define([
 			this.getView().byId("newReviewPage").setTitle("Create a new review for " + this.reviewee_email);
 		},
 		
-		_postReview : function(oNewReview, sCsrfToken, fSuccess) {
+		onNavBack : function() {
+			this.getRouter().navTo("main", {'reviewee_email': this.reviewee_email}, true);
+		},
+		
+		_postReview : function(oNewReview, fSuccess) {
 			$.ajax({
 				method : "POST",
 				url: this.getMainServiceURL() + '/reviews',
 				data : JSON.stringify(oNewReview),
 				processData : false,
-				contentType : "application/json",
-				headers : { "x-csrf-token" : sCsrfToken }
+				contentType : "application/json"
 			})
 			.done(function(data, textStatus, oJqXHR) {fSuccess(oNewReview, textStatus, oJqXHR)})
 			.fail( function(oJqXHR, sTextStatus, sErrorThrown) {

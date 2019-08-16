@@ -45,42 +45,12 @@ sap.ui.define([
 				return this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			},
 
-			/**
-			 * Event handler for navigating back.
-			 * It there is a history entry we go one step back in the browser history
-			 * If not, it will replace the current entry of the browser history with the main route.
-			 * @public
-			 */
-			onNavBack : function() {
-				var sPreviousHash = History.getInstance().getPreviousHash();
-
-					if (sPreviousHash !== undefined) {
-					history.go(-1);
-				} else {
-					this.getRouter().navTo("main", {}, true);
-				}
-			},
-
 			isLocalDevEnvironment : function() {
 				return this.getOwnerComponent().isLocalDevEnvironment();
 			},
 
 			getMainServiceURL : function() {
 				return this.getOwnerComponent().getMetadata().getManifestEntry("sap.app").dataSources["mainService"].uri;
-			},
-			
-			fetchCsrfToken : function(oData, fCallback, fSuccess) {
-				$.ajax({
-					method : "GET",
-					url : "/",
-					headers : { "x-csrf-token" : "fetch" }
-				}).done( function(data, textStatus, oJqXHR) { 
-					var csrfToken = oJqXHR.getResponseHeader('X-Csrf-Token'); 
-					fCallback(oData, csrfToken, fSuccess);
-				}).fail( function(oJqXHR, sTextStatus, sErrorThrown) {
-					MessageToast.show("Failed to fetch x-csrf-token.");
-					jQuery.sap.log.error("Failed to fetch x-csrf-token.", sErrorThrown);
-				});
 			}
 
 		});
