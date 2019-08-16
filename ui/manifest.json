@@ -99,8 +99,8 @@
 
             "targets": {
                 "main": {
-                    "viewName": "Advertisements",
-                    "viewId": "advertisements",
+                    "viewName": "Reviews",
+                    "viewId": "reviews",
                     "viewLevel": 1
                 },
                 "createAd": {

@@ -4,7 +4,7 @@ sap.ui.define([
 ], function(BaseController, MessageToast) {
 	"use strict";
 
-	return BaseController.extend("sap.demo.bulletinboard.controller.Advertisements", {
+	return BaseController.extend("sap.demo.bulletinboard.controller.Reviews", {
 
 		_getCategories : function() {
 			var aCategories = [];

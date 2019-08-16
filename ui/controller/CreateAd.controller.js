@@ -49,7 +49,7 @@ sap.ui.define([
 				processData : false,
 				contentType : "application/json",
 				// Pseudo-authentication to qualify as "premium user" who is
-				// allowed to create new advertisements:
+				// allowed to create new reviews:
 				headers : { "User-Id" : this.getUserId(), "x-csrf-token" : sCsrfToken }
 			})
 			.done(fSuccess)
@@ -75,7 +75,7 @@ sap.ui.define([
 
 			MessageToast.show("Your new ad has been created with ID " + oNewAdFromServer.id + ".");
 
-			// Reset model for new advertisement so that the data of the created instance
+			// Reset model for new reviews so that the data of the created instance
 			// does not appear as initial data when creating another one.
 			this._initNewAdModel();
 			

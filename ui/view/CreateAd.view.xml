@@ -8,7 +8,7 @@
     xmlns:f="sap.ui.layout.form">
 
     <semantic:FullscreenPage
-        title="Create New Advertisement"
+        title="Create New Review"
         showNavButton="true"
         navButtonPress="onNavBack">
         <semantic:content>

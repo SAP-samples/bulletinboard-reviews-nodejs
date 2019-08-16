@@ -25,10 +25,10 @@ sap.ui.define([ "sap/ui/core/UIComponent", "sap/ui/model/json/JSONModel",
 				// this.getModel().attachRequestCompleted(this._generateDummyAds.bind(this));
 			}
 			
-			//see manifest.json in order to understand from where the advertisement (mainService) is loaded
+			//see manifest.json in order to understand from where the reviews (mainService) is loaded
 			// and which controller is attached to which view
 			this.getModel().attachRequestFailed(function() {
-				MessageToast.show("Failed to load advertisements.");
+				MessageToast.show("Failed to load reviews.");
 			});
 			
 			// add next to the main model another user model

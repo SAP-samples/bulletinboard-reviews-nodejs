@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="sap.demo.bulletinboard.controller.Advertisements"
+    controllerName="sap.demo.bulletinboard.controller.Reviews"
     xmlns:mvc="sap.ui.core.mvc"
 	xmlns:l="sap.ui.layout"
 	xmlns:core="sap.ui.core"

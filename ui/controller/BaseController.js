@@ -116,7 +116,7 @@ sap.ui.define([
 					method : "DELETE",
 					url: this.getMainServiceURL() + "/" + iAdId,
 					// Pseudo-authentication to qualify as "premium user" who is
-					// allowed to create new advertisements:
+					// allowed to create new reviews:
 					headers : { "User-Id" : this.getUserId(), "x-csrf-token" : sCsrfToken }
 				})
 				.done(fSuccess)
