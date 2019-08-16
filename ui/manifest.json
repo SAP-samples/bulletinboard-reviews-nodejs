@@ -86,14 +86,9 @@
                     "target": ["main"]
                 },
                 {
-                    "pattern": "NewAd",
-                    "name": "createAd",
-                    "target": ["createAd"]
-                },
-                {
-                    "pattern": "Ads/{adId}",
-                    "name": "ad",
-                    "target": ["ad"]
+                    "pattern": "NewAd/{reviewee_email}",
+                    "name": "createReview",
+                    "target": ["createReview"]
                 }
             ],
 
@@ -103,14 +98,9 @@
                     "viewId": "reviews",
                     "viewLevel": 1
                 },
-                "createAd": {
-                    "viewName": "CreateAd",
-                    "viewId": "createAd",
-                    "viewLevel": 2
-                },
-                "ad": {
-                    "viewName": "AdDetails",
-                    "viewId": "adDetails",
+                "createReview": {
+                    "viewName": "CreateReview",
+                    "viewId": "createReview",
                     "viewLevel": 2
                 },
                 "notFound": {

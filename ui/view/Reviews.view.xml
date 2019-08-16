@@ -17,12 +17,8 @@
             <items>
             <ObjectListItem
 					title="{reviewer_email}"
-					number="{rating}">
-				<firstStatus>
-					<ObjectStatus
-						text="{Status}"
-						state="Success" />
-				</firstStatus>
+					number="{rating}"
+                    numberState="Success">
 				<attributes>
 					<ObjectAttribute text="{comment}" />
 				</attributes>
