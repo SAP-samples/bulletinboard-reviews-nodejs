@@ -3,6 +3,8 @@ This is the reviews service of the bulletin board. It doesn't have a GUI at this
 
 ## How to work locally
 
+After checkout please run `npm i` once in order to install all node dependencies.
+
 Use the script `run-db.sh` to start your local postgres DB instance. Afterwards, you can run `start-app-locally.sh` to start your local API endpoint. Optionally, you can add the parameter `debug` in order to start your local server in debug mode.
 
 The tests are executed with command `npm test`. Starting the test suite in debug mode is done similarly via command `npm run test:debug`.
@@ -13,7 +15,8 @@ Use script `deploy-to-cf.sh`.
 
 ## API
 
-The following endpoints are supported and tested:
+The following endpoints are supported and tested (remember to set the `application/json` content-type header):
+
 - `GET /api/v1/averageRatings/:email`: given the email of a user, get his/her average rating
   Response: `200 OK`
   Response Body:
