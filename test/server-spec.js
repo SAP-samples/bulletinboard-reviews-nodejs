@@ -1,24 +1,32 @@
 const assert = require('assert')
+const sinon = require('sinon')
 const PostgresReviewsService = require('../js/postgres-reviews-service')
+const RabbitMQService = require('../js/rabbitmq-service')
 const ExpressServer = require('../js/express-server')
 const request = require('supertest');
 
-const DB_CONNECTION_URI = 'postgres://postgres@localhost:6543/postgres';
+const DB_CONNECTION_URI = 'postgres://postgres@localhost:6543/postgres'
+const AMQP_URI = 'amqp://guest:guest@localhost:5672'
 const PORT = 9090;
 
 describe('Server', function () {
     let server
     let baseUrl
+    let rabbitmqService
 
     before(async function () {
-        server = new ExpressServer(new PostgresReviewsService(DB_CONNECTION_URI))
+        rabbitmqService = new RabbitMQService(AMQP_URI)
+        server = new ExpressServer(
+            new PostgresReviewsService(DB_CONNECTION_URI),
+            rabbitmqService
+        )
         server.start(PORT)
         baseUrl = request(`http://localhost:${PORT}`)
         await baseUrl.delete('/api/v1/reviews').expect(204)
     })
 
     after(async function () {
-        server.stop()
+        await server.stop()
     })
 
     afterEach(async function () {
@@ -113,5 +121,20 @@ describe('Server', function () {
             const averageRating = response.body
             assert.equal(averageRating.average_rating, 2.5)
         })
+    })
+
+    it('should send the averageRating whenever a rating is created', async function () {
+        sinon.spy(rabbitmqService, 'notify')
+        await baseUrl.post('/api/v1/reviews').send({
+            "reviewee_email": "john.doe@some.org",
+            "reviewer_email": "jane.joe@acme.org",
+            "rating": 5,
+            "comment": "cool guy"
+        }).expect(201)
+
+        assert.equal(rabbitmqService.notify.calledOnce, true)
+
+        assert.equal(rabbitmqService.notify.getCall(0).args[0].reviewee_email, 'john.doe@some.org')
+        assert.equal(rabbitmqService.notify.getCall(0).args[0].average_rating, '5.0000000000000000')
     })
 })

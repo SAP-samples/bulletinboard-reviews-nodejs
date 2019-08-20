@@ -15,13 +15,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "amqp": "^0.2.7",
+    "amqplib": "^0.5.5",
     "express": "^4.16.3",
     "pg": "^7.4.3"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
     "mocha": "^5.2.0",
+    "sinon": "^7.4.1",
     "supertest": "^3.3.0"
   }
 }
