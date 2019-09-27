@@ -20,7 +20,7 @@ function ExpressServer(reviewsService) {
 	})
 
 	app.get('/api/v1/reviews/:revieweeEmail', async function readAll(req, res) {
-		const revieweeEmail = req.params.revieweeEmail;
+		const revieweeEmail = req.params.revieweeEmail
 		const result = await reviewsService.getAllFor(revieweeEmail)
 		res.send(result)
 	})
