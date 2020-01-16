@@ -2,6 +2,7 @@
 
 const express = require('express')
 const bodyParser = require('body-parser')
+const HTTP_OK = 200
 const HTTP_NO_CONTENT = 204
 const HTTP_CREATED = 201
 const HTTP_CONFLICT = 409
@@ -42,6 +43,10 @@ function ExpressServer(reviewsService) {
 	app.delete('/api/v1/reviews', async function deleteAll(req, res) {
 		await reviewsService.deleteAll()
 		res.status(HTTP_NO_CONTENT).end()
+	})
+
+	app.get('/health', function (req, res) {
+		res.status(HTTP_OK).end()
 	})
 
 	this.start = function (port) {

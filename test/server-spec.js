@@ -114,4 +114,8 @@ describe('Server', function () {
             assert.equal(averageRating.average_rating, 2.5)
         })
     })
+
+    it('should respond ith 200 OK on health endpoint', async function () {
+        await baseUrl.get('/health').expect(200)
+    })
 })
