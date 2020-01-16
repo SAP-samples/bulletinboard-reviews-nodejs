@@ -1,0 +1,28 @@
+# OS
+.DS_Store
+thumbs.db
+
+# Node
+*.log
+npm-debug.log
+node_modules
+
+# IntelliJ
+.idea
+
+# Eclipse
+.classpath
+.project
+.settings
+
+# Visual Studio Code
+.vscode
+
+
+# Project specific
+.git
+deploy-to-cf.sh
+manifest.yml
+README.md
+start-app-locally.sh
+start-db.sh
