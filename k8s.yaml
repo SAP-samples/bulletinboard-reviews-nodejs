@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bulletinboards-reviews-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: reviews
+      component: bulletinboard-pod
+  template:
+    metadata:
+      labels:
+        app: reviews
+        component: bulletinboard-pod
+    spec:
+      containers:
+      - name: bulletinboard-reviews
+        image: bulletinboard-reviews-node:latest
+        imagePullPolicy: IfNotPresent
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 9090
+          initialDelaySeconds: 3
+          periodSeconds: 2
+        ports:
+        - containerPort: 9090
+        env:
+        - name: POSTGRES_URI
+          value: postgres://postgres@postgres-reviews:5432/postgres
+        - name: PORT
+          value: '9090'
+      initContainers:
+        - name: check-db-ready
+          image: postgres:9.6-alpine
+          command: ['sh', '-c',
+            'until pg_isready -h postgres-reviews -p 5432;
+            do echo waiting for database; sleep 2; done;']
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reviews-service
+spec:
+  selector:
+    app: reviews
+    component: bulletinboard-pod
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-reviews
+spec:
+  selector:
+    app: reviews
+    component: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-stateful-set
+spec:
+  serviceName: postgres-reviews
+  selector:
+    matchLabels:
+      app: reviews
+      component: postgres
+  template:
+    metadata:
+      labels:
+        app: reviews
+        component: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:9.6-alpine
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: storage
+          mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 256Mi
