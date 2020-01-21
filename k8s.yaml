@@ -35,7 +35,7 @@ spec:
         - name: check-db-ready
           image: postgres:9.6-alpine
           command: ['sh', '-c',
-            'until pg_isready -h postgres-reviews -p 5432;
+            'until pg_isready -h postgres-reviews -p 5432 -U postgres;
             do echo waiting for database; sleep 2; done;']
 ---
 apiVersion: v1
@@ -66,7 +66,7 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres-stateful-set
+  name: postgres-reviews-stateful-set
 spec:
   serviceName: postgres-reviews
   selector:

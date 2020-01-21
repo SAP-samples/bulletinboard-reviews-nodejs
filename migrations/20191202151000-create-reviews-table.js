@@ -5,6 +5,7 @@ exports.up = (db, callback) => {
   (
     "reviewee_email" VARCHAR,
     "reviewer_email" VARCHAR,
+    "comment" VARCHAR,
     "rating" INTEGER,
     PRIMARY KEY (reviewee_email, reviewer_email)
  )`, callback);
