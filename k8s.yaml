@@ -65,7 +65,7 @@ spec:
   ports:
   - port: 9090
     targetPort: 9090
-  type: ClusterIP
+  type: LoadBalancer
 ---
 apiVersion: v1
 kind: Service
@@ -111,3 +111,60 @@ spec:
         resources:
           requests:
             storage: 256Mi
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: reviews-db-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: reviews
+      component: postgres
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: reviews
+          component: bulletinboard-pod
+    ports:
+    - port: 5432
+  egress: []
+---
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: reviews-svc-policy
+  spec:
+    podSelector:
+      matchLabels:
+        app: reviews
+        component: bulletinboard-pod
+    policyTypes:
+    - Ingress
+    - Egress
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: ads
+            component: bulletinboard-pod
+      - podSelector:
+          matchLabels:
+            app: nginx-ingress
+        namespaceSelector:
+          matchLabels:
+            name: kube-system
+      ports:
+      - port: 9090
+    egress:
+    - to:
+      - podSelector:
+          matchLabels:
+            app: reviews
+            component: postgres
+      ports:
+      - port: 5432
