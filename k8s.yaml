@@ -44,6 +44,8 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: bulletinboard-reviews-ingress
+  labels:
+    garden.sapcloud.io/purpose: managed-cert
 spec:
   rules:
   - host: bb-reviews.ingress.cnb2.cnb.shoot.canary.k8s-hana.ondemand.com 
@@ -53,6 +55,10 @@ spec:
         backend:
           serviceName: reviews-service
           servicePort: 9090
+  tls:
+    - hosts:
+      - bb-reviews.ingress.cnb2.cnb.shoot.canary.k8s-hana.ondemand.com
+      secretName: reviews-certs
 ---
 apiVersion: v1
 kind: Service
@@ -65,7 +71,7 @@ spec:
   ports:
   - port: 9090
     targetPort: 9090
-  type: LoadBalancer
+  type: ClusterIP
 ---
 apiVersion: v1
 kind: Service
@@ -137,7 +143,7 @@ spec:
   apiVersion: networking.k8s.io/v1
   kind: NetworkPolicy
   metadata:
-    name: reviews-svc-policy
+    name: reviews-pod-policy
   spec:
     podSelector:
       matchLabels:
@@ -172,3 +178,4 @@ spec:
       - namespaceSelector:
           matchLabels:
             name: kube-system
+  
