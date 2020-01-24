@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-reviews-stateful-set
+spec:
+  serviceName: postgres-reviews
+  selector:
+    matchLabels:
+      app: reviews
+      component: postgres
+  template:
+    metadata:
+      labels:
+        app: reviews
+        component: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:9.6-alpine
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: storage
+          mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: postgres-reviews
+spec:
+    selector:
+    app: reviews
+    component: postgres
+    ports:
+    - port: 5432
+    targetPort: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: reviews-db-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: reviews
+      component: postgres
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: reviews
+          component: bulletinboard-pod
+    ports:
+    - port: 5432
+  egress: []
