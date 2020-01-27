@@ -5,8 +5,8 @@ const pg = require('pg')
 function PostgresReviewsService(dbConnectionUri) {
 
     const pool = new pg.Pool({ 'connectionString': dbConnectionUri })
-    const sql = 'create table if not exists "reviews"("reviewee_email" varchar, "reviewer_email" varchar, "comment" varchar, "rating" integer, primary key (reviewee_email, reviewer_email))'
-    const tableInitialized = pool.query(sql).then(()=> {
+    const CREATE_SQL = 'create table if not exists "reviews"("reviewee_email" varchar, "reviewer_email" varchar, "comment" varchar, "rating" integer, primary key (reviewee_email, reviewer_email))'
+    const tableInitialized = pool.query(CREATE_SQL).then(()=> {
         console.log("Database connection established")
     })
 
