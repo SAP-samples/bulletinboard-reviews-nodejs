@@ -2,7 +2,6 @@ const assert = require('assert')
 const PostgresReviewsService = require('../js/postgres-reviews-service')
 const ExpressServer = require('../js/express-server')
 const request = require('supertest');
-const migrateDB = require('../js/migrate-db');
 
 const DB_CONNECTION_URI = 'postgres://postgres@localhost:6543/postgres';
 const PORT = 9090;
@@ -12,7 +11,6 @@ describe('Server', function () {
     let baseUrl
 
     before(async function () {
-        await migrateDB(DB_CONNECTION_URI)
         server = new ExpressServer(new PostgresReviewsService(DB_CONNECTION_URI))
         server.start(PORT)
         baseUrl = request(`http://localhost:${PORT}`)
@@ -115,9 +113,5 @@ describe('Server', function () {
             const averageRating = response.body
             assert.equal(averageRating.average_rating, 2.5)
         })
-    })
-
-    it('should respond ith 200 OK on health endpoint', async function () {
-        await baseUrl.get('/health').expect(200)
     })
 })
