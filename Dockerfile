@@ -4,7 +4,6 @@ WORKDIR /app
 COPY package*.json ./
 COPY js ./js
 COPY ui ./ui
-COPY migrations ./migrations
 
 RUN npm ci
 
