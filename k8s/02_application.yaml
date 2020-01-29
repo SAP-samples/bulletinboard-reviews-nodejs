@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
       - name: bulletinboard-reviews
-        image: registry.ingress.cnb2.cnb.shoot.canary.k8s-hana.ondemand.com/bulletinboard-reviews-node:latest
+        image: registry.ingress.cnb3.cnb.shoot.canary.k8s-hana.ondemand.com/bulletinboard-reviews-node:latest
         imagePullPolicy: IfNotPresent
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 9090
-          initialDelaySeconds: 3
-          periodSeconds: 2
+        # readinessProbe:
+        #   httpGet:
+        #     path: /health
+        #     port: 9090
+        #   initialDelaySeconds: 3
+        #   periodSeconds: 2
         ports:
         - containerPort: 9090
         env:
@@ -46,11 +46,11 @@ metadata:
     name: reviews-service
 spec:
     selector:
-    app: reviews
-    component: bulletinboard-pod
+      app: reviews
+      component: bulletinboard-pod
     ports:
     - port: 9090
-    targetPort: 9090
+      targetPort: 9090
     type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1beta1
@@ -61,7 +61,7 @@ metadata:
     garden.sapcloud.io/purpose: managed-cert
 spec:
   rules:
-  - host: bb-reviews.ingress.cnb2.cnb.shoot.canary.k8s-hana.ondemand.com 
+  - host: bb-reviews.ingress.cnb3.cnb.shoot.canary.k8s-hana.ondemand.com 
     http:
       paths:
       - path: /
@@ -70,7 +70,7 @@ spec:
           servicePort: 9090
   tls:
     - hosts:
-      - bb-reviews.ingress.cnb2.cnb.shoot.canary.k8s-hana.ondemand.com
+      - bb-reviews.ingress.cnb3.cnb.shoot.canary.k8s-hana.ondemand.com
       secretName: reviews-certs
 ---
   apiVersion: networking.k8s.io/v1

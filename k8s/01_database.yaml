@@ -37,11 +37,11 @@ metadata:
     name: postgres-reviews
 spec:
     selector:
-    app: reviews
-    component: postgres
+      app: reviews
+      component: postgres
     ports:
     - port: 5432
-    targetPort: 5432
+      targetPort: 5432
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
