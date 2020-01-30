@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
   - name: bulletinboard-reviews
-    image: bulletinboard-reviews-node:latest
+    image: [IMAGE_NAME]
     imagePullPolicy: IfNotPresent
     ports:
     - containerPort: 9090
