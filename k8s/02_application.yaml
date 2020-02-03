@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bulletinboards-reviews-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: reviews
+      component: bulletinboard-pod
+  template:
+    metadata:
+      labels:
+        app: reviews
+        component: bulletinboard-pod
+    spec:
+      containers:
+      - name: bulletinboard-reviews
+        image: registry.ingress.cnb3.cnb.shoot.canary.k8s-hana.ondemand.com/bulletinboard-reviews-node:latest
+        imagePullPolicy: IfNotPresent
+        # readinessProbe:
+        #   httpGet:
+        #     path: /health
+        #     port: 9090
+        #   initialDelaySeconds: 3
+        #   periodSeconds: 2
+        ports:
+        - containerPort: 9090
+        env:
+        - name: POSTGRES_URI
+          value: postgres://postgres@postgres-reviews:5432/postgres
+        - name: PORT
+          value: '9090'
+      imagePullSecrets:
+        - name: internal-registry
+      initContainers:
+        - name: check-db-ready
+          image: postgres:9.6-alpine
+          command: ['sh', '-c',
+            'until pg_isready -h postgres-reviews -p 5432 -U postgres;
+            do echo waiting for database; sleep 2; done;']
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: reviews-service
+spec:
+    selector:
+      app: reviews
+      component: bulletinboard-pod
+    ports:
+    - port: 9090
+      targetPort: 9090
+    type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: bulletinboard-reviews-ingress
+  labels:
+    garden.sapcloud.io/purpose: managed-cert
+spec:
+  rules:
+  - host: bb-reviews.ingress.cnb3.cnb.shoot.canary.k8s-hana.ondemand.com 
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: reviews-service
+          servicePort: 9090
+  tls:
+    - hosts:
+      - bb-reviews.ingress.cnb3.cnb.shoot.canary.k8s-hana.ondemand.com
+      secretName: reviews-certs
+---
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: reviews-pod-policy
+  spec:
+    podSelector:
+      matchLabels:
+        app: reviews
+        component: bulletinboard-pod
+    policyTypes:
+    - Ingress
+    - Egress
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: ads
+            component: bulletinboard-pod
+      - podSelector:
+          matchLabels:
+            app: nginx-ingress
+        namespaceSelector:
+          matchLabels:
+            name: kube-system
+      ports:
+      - port: 9090
+    egress:
+    - to:
+      - podSelector:
+          matchLabels:
+            app: reviews
+            component: postgres
+      ports:
+      - port: 5432
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: kube-system
+  

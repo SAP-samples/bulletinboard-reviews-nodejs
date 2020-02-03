@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bulletinboard-reviews-pod
+  labels:
+    app: reviews
+    component: bulletinboard-pod
+spec:
+  containers:
+  - name: bulletinboard-reviews
+    image: [IMAGE_NAME]
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 9090
+    env:
+    - name: POSTGRES_URI
+      value: postgres://postgres@postgres-reviews:5432/postgres
+    - name: PORT
+      value: '9090'
+  initContainers:
+    - name: check-db-ready
+      image: postgres:9.6-alpine
+      command: ['sh', '-c',
+        'until pg_isready -h postgres-reviews -p 5432 -U postgres;
+        do echo waiting for database; sleep 2; done;']
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reviews-service
+spec:
+  selector:
+    app: reviews
+    component: bulletinboard-pod
+  ports:
+  - port: 9090
+    targetPort: 9090
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres-reviews-pod
+  labels:
+    app: reviews
+    component: postgres
+spec:
+  containers:
+  - name: postgres
+    image: postgres:9.6-alpine
+    ports:
+    - containerPort: 5432
+    volumeMounts:
+    - name: storage
+      mountPath: /data/db
+  volumes:
+    - name: storage
+      persistentVolumeClaim:
+        claimName: postgres-reviews-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-reviews
+spec:
+  selector:
+    app: reviews
+    component: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-reviews-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
