@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const HTTP_NO_CONTENT = 204
 const HTTP_CREATED = 201
 const HTTP_CONFLICT = 409
+const INTERNAL_SERVER_ERROR = 500
 
 function ExpressServer(reviewsService) {
 
@@ -14,35 +15,35 @@ function ExpressServer(reviewsService) {
 
 	app.use(express.static('ui'));
 
-	app.get('/api/v1/reviews', async function readAll(req, res) {
+	app.get('/api/v1/reviews', tryCatch(async function readAll(req, res) {
 		const result = await reviewsService.getAll()
 		res.send(result)
-	})
+	}))
 
-	app.get('/api/v1/reviews/:revieweeEmail', async function readAll(req, res) {
+	app.get('/api/v1/reviews/:revieweeEmail', tryCatch(async function readAll(req, res) {
 		const revieweeEmail = req.params.revieweeEmail
 		const result = await reviewsService.getAllFor(revieweeEmail)
 		res.send(result)
-	})
+	}))
 
-	app.get('/api/v1/averageRatings/:email', async function getAverageUserRating(req, res) {
+	app.get('/api/v1/averageRatings/:email', tryCatch(async function getAverageUserRating(req, res) {
 		const result = await reviewsService.getAverageRating(req.params.email)
 		res.send(result)
-	})
+	}))
 
-	app.post('/api/v1/reviews', async function create(req, res) {
+	app.post('/api/v1/reviews', tryCatch(async function create(req, res) {
 		try {
 			await reviewsService.create(req.body)
 		} catch (err) {
 			return res.status(HTTP_CONFLICT).end()
 		}
 		res.status(HTTP_CREATED).location(req.body.component_name).end()
-	})
+	}))
 
-	app.delete('/api/v1/reviews', async function deleteAll(req, res) {
+	app.delete('/api/v1/reviews', tryCatch(async function deleteAll(req, res) {
 		await reviewsService.deleteAll()
 		res.status(HTTP_NO_CONTENT).end()
-	})
+	}))
 
 	this.start = function (port) {
 		//REVISE are we listening to early - what if the DB is not yet connected?
@@ -55,5 +56,20 @@ function ExpressServer(reviewsService) {
 		httpServer.close()
 	}
 }
+
+const tryCatch = (wrappedMiddleware) => {
+	return async (req, res, next) => {
+	    try {
+		    await wrappedMiddleware(req, res, next);
+	  	} catch (error) {
+			console.error(error.stack)
+		  	if (res.headersSent) {
+				next(error);
+		  	} else {
+				res.status(INTERNAL_SERVER_ERROR).send('INTERNAL_SERVER_ERROR');
+		  	}
+	    }
+    };
+};
 
 module.exports = ExpressServer
