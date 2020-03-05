@@ -47,7 +47,11 @@ function ExpressServer(reviewsService) {
 
 	this.start = function (port) {
 		//REVISE are we listening to early - what if the DB is not yet connected?
-		httpServer = app.listen(port)
+		httpServer = app.listen(port).on('error', function (error) {
+			console.error(`Failed to start server at port ${port}, port might be in use.`)
+			console.error(error.stack)
+			process.exit(2)
+		})
 		console.log(`Server started on port ${port}`)
 	}
 
