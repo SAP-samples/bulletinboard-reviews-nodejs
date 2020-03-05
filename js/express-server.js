@@ -13,7 +13,7 @@ function ExpressServer(reviewsService) {
 	const app = express()
 	app.use(bodyParser.json())
 
-	app.use(express.static('ui'));
+	app.use(express.static('ui'))
 
 	app.get('/api/v1/reviews', tryCatch(async function readAll(req, res) {
 		const result = await reviewsService.getAll()
@@ -64,16 +64,16 @@ function ExpressServer(reviewsService) {
 const tryCatch = (wrappedMiddleware) => {
 	return async (req, res, next) => {
 	    try {
-		    await wrappedMiddleware(req, res, next);
+		    await wrappedMiddleware(req, res, next)
 	  	} catch (error) {
 			console.error(error.stack)
 		  	if (res.headersSent) {
-				next(error);
+				next(error)
 		  	} else {
-				res.status(INTERNAL_SERVER_ERROR).send('INTERNAL_SERVER_ERROR');
+				res.status(INTERNAL_SERVER_ERROR).send('INTERNAL_SERVER_ERROR')
 		  	}
 	    }
-    };
-};
+    }
+}
 
 module.exports = ExpressServer

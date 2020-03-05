@@ -1,10 +1,10 @@
 const assert = require('assert')
 const PostgresReviewsService = require('../js/postgres-reviews-service')
 const ExpressServer = require('../js/express-server')
-const request = require('supertest');
+const request = require('supertest')
 
-const DB_CONNECTION_URI = 'postgres://postgres@localhost:6543/postgres';
-const PORT = 9090;
+const DB_CONNECTION_URI = 'postgres://postgres@localhost:6543/testdb'
+const PORT = 9091;
 
 describe('Server', function () {
     let server
