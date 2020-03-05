@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 set +e; existing_db_container_name=$(docker ps -a -f name=postgres-bulletinboard-reviews | grep postgres-bulletinboard-reviews); set -e
 if [ -z "$existing_db_container_name" ]
