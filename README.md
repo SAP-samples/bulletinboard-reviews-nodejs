@@ -10,6 +10,8 @@ You can interact with the service using a REST client like Postman or the GUI.
 To execute the tests or to start the service a local database is needed.
 The script `start-db.sh` can be used to start a local database (using docker).
 
+Also the dependencies need to be installed. Run `npm install` to install those.
+
 ### Execute tests
 The tests can be executed with npm: `npm test`
 
