@@ -3,8 +3,8 @@ applications:
 - name: bulletinboard-reviews
   memory: 80MB
   command: npm start
-  routes: 
-    - route: bulletinboard-reviews-cnb.cfapps.sap.hana.ondemand.com
+  routes:
+    - route: '[UNIQUE-HOSTNAME].[DOMAIN]'
   buildpacks:
     - https://github.com/cloudfoundry/nodejs-buildpack
   services:
