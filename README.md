@@ -1,5 +1,5 @@
 # bulletinboard-reviews
-This is the **node.js** version of the reviews-service for the bulletin board application.
+This is the **Node.js** version of the reviews-service for the bulletin board application.
 Reviews of users can be created, deleted and viewed.
 You can interact with the service using a REST client like Postman or the GUI.
 
@@ -8,7 +8,7 @@ You can interact with the service using a REST client like Postman or the GUI.
 ## How to work locally
 
 To execute the tests or to start the service a local database is needed.
-The script `start-db.sh` can be used to start a local database (using docker).
+The script `start-db.sh` can be used to start a local database (using Docker).
 
 Also the dependencies need to be installed. Run `npm install` to install those.
 
@@ -17,12 +17,12 @@ The tests can be executed with npm: `npm test`
 
 ### Start service locally
 Run `npm start` to start the service.
-The service will listen on port 8080.
+The service will listen on port 9090.
 
 ## A word on cloud readiness
 
-### CloudFoundry
-To speed a up the configuration for a deployment in CloudFoundry a [manifest.yaml](manifest.yaml) with placeholders is provided.
+### Cloud Foundry
+To speed a up the configuration for a deployment in Cloud Foundry a [manifest.yaml](manifest.yaml) with placeholders is provided.
 
 ### Kubernetes
 For a deployment of the service in Kubernetes a pre-configured yaml-file ([k8s-minimal.yaml](k8s-minimal.yaml)) with placeholders is already part of the repository.
