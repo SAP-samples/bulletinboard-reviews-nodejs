@@ -12,7 +12,7 @@ if (VCAP_SERVICES) {
     dbConnectionUriVCAP = vcapServices.postgresql[0].credentials.uri
 }
 const server = new ExpressServer(new PostgresReviewsService(
-    dbConnectionUriVCAP || DB_CONNECTION_URI_DEFAULT
+    dbConnectionUriVCAP || process.env.POSTGRES_URI || DB_CONNECTION_URI_DEFAULT
 ))
 
 server.start(process.env.PORT || PORT_DEFAULT)
