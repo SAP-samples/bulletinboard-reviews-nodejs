@@ -14,7 +14,7 @@ spec:
     - containerPort: 9090
     env:
     - name: POSTGRES_URI
-      value: postgres://postgres@postgres-reviews:5432/postgres
+      value: postgres://postgres:postgrespassword@postgres-reviews:5432/postgres
     - name: PORT
       value: '9090'
   initContainers:
@@ -52,6 +52,9 @@ spec:
     volumeMounts:
     - name: storage
       mountPath: /data/db
+    env:
+    - name: POSTGRES_PASSWORD
+      value: postgrespassword
   volumes:
     - name: storage
       persistentVolumeClaim:
