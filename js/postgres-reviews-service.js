@@ -8,7 +8,7 @@ function PostgresReviewsService(dbConnectionUri) {
     const CREATE_SQL = `CREATE TABLE IF NOT EXISTS "reviews" (
         "reviewee_email" VARCHAR (256),
         "reviewer_email" VARCHAR (256),
-        "rating" SMALLINT,
+        "rating" INTEGER,
         "comment" VARCHAR (1024),
         PRIMARY KEY (reviewee_email, reviewer_email))`
 
