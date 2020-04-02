@@ -8,7 +8,7 @@ function PostgresReviewsService(dbConnectionUri) {
     const CREATE_SQL = `CREATE TABLE IF NOT EXISTS "reviews" (
         "reviewee_email" VARCHAR (256),
         "reviewer_email" VARCHAR (256),
-        "rating" VARCHAR (256),
+        "rating" INTEGER,
         "comment" VARCHAR (1024),
         PRIMARY KEY (reviewee_email, reviewer_email))`
 
@@ -34,7 +34,7 @@ function PostgresReviewsService(dbConnectionUri) {
 
     this.getAverageRating = async function (revieweeEmail) {
         await tableInitialized
-        const result = await pool.query(`select avg(cast(rating as float)) as "average_rating" from "reviews" where "reviewee_email" = '${revieweeEmail}'`)
+        const result = await pool.query(`select avg(rating) as "average_rating" from "reviews" where "reviewee_email" = '${revieweeEmail}'`)
         return result.rows[0]
     }
 
