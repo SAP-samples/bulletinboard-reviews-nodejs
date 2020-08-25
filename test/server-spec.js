@@ -11,7 +11,9 @@ describe('Server', function () {
     let baseUrl
 
     before(async function () {
-        server = new ExpressServer(new PostgresReviewsService(DB_CONNECTION_URI))
+        const loggerMock = { info: () => { } }
+        const reviewsService = new PostgresReviewsService(DB_CONNECTION_URI, loggerMock)
+        server = new ExpressServer(reviewsService, loggerMock)
         server.start(PORT)
         baseUrl = request(`http://localhost:${PORT}`)
         await baseUrl.delete('/api/v1/reviews').expect(204)
@@ -90,7 +92,7 @@ describe('Server', function () {
                 const reviews = response.body
                 assert.equal(reviews.length, 1)
                 assert.equal(reviews[0].reviewee_email, 'john.doe@some.org')
-        })
+            })
     })
 
     it('should return average rating of 2.5 for two ratings of 0 and 5', async function () {
