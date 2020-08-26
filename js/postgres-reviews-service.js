@@ -2,7 +2,7 @@
 
 const pg = require('pg')
 
-function PostgresReviewsService(dbConnectionUri, defaultLogger) {
+function PostgresReviewsService(dbConnectionUri, logger) {
     const pool = new pg.Pool({ 'connectionString': dbConnectionUri })
 
     const CREATE_SQL = `CREATE TABLE IF NOT EXISTS "reviews" (
@@ -13,9 +13,9 @@ function PostgresReviewsService(dbConnectionUri, defaultLogger) {
         PRIMARY KEY ("reviewee_email", "reviewer_email"))`
 
     const tableInitialized = pool.query(CREATE_SQL).then(function () {
-        defaultLogger.info('Database connection established')
-    }).catch(function(error) {
-        defaultLogger.error(error.stack)
+        logger.info('Database connection established')
+    }).catch(function (error) {
+        logger.error(error.stack)
         process.exit(1)
     })
 
@@ -27,13 +27,13 @@ function PostgresReviewsService(dbConnectionUri, defaultLogger) {
 
     this.getAllFor = async function (revieweeEmail) {
         await tableInitialized
-        const result = await pool.query('SELECT * FROM "reviews" WHERE reviewee_email = $1', [revieweeEmail])
+        const result = await pool.query('SELECT * FROM "reviews" WHERE "reviewee_email" = $1', [revieweeEmail])
         return result.rows
     }
 
     this.getAverageRating = async function (revieweeEmail) {
         await tableInitialized
-        const result = await pool.query('SELECT avg(rating) AS "average_rating" FROM "reviews" WHERE "reviewee_email" = $1',[revieweeEmail])
+        const result = await pool.query('SELECT avg("rating") AS "average_rating" FROM "reviews" WHERE "reviewee_email" = $1', [revieweeEmail])
         return result.rows[0]
     }
 

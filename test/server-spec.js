@@ -2,18 +2,21 @@ const assert = require('assert')
 const PostgresReviewsService = require('../js/postgres-reviews-service')
 const ExpressServer = require('../js/express-server')
 const request = require('supertest')
+const sinon = require('sinon')
+const logger = require('../js/logger')
 
 const DB_CONNECTION_URI = 'postgres://postgres@localhost:6543/testdb'
-const PORT = 9091;
+const PORT = 9091
 
 describe('Server', function () {
     let server
     let baseUrl
 
     before(async function () {
-        const loggerMock = { info: () => { } }
-        const reviewsService = new PostgresReviewsService(DB_CONNECTION_URI, loggerMock)
-        server = new ExpressServer(reviewsService, loggerMock)
+        const testLogger = logger.create()
+        sinon.stub(testLogger, 'info')
+        const reviewsService = new PostgresReviewsService(DB_CONNECTION_URI, testLogger)
+        server = new ExpressServer(reviewsService, testLogger)
         server.start(PORT)
         baseUrl = request(`http://localhost:${PORT}`)
         await baseUrl.delete('/api/v1/reviews').expect(204)

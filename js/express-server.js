@@ -50,7 +50,7 @@ function ExpressServer(reviewsService, defaultLogger) {
 	}))
 
 	this.start = function (port) {
-		//REVISE are we listening to early - what if the DB is not yet connected?
+		//REVISE are we listening too early - what if the DB is not yet connected?
 		httpServer = app.listen(port).on('error', function (error) {
 			defaultLogger.error(error.stack)
 			process.exit(2)
