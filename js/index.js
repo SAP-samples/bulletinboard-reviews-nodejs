@@ -1,7 +1,6 @@
-'use strict'
-const ExpressServer = require('./express-server')
-const PostgresReviewsService = require('./postgres-reviews-service')
-const logger = require('./logger')
+import ExpressServer from './express-server.js'
+import PostgresReviewsService from './postgres-reviews-service.js'
+import logger from './logger.js'
 
 const DB_CONNECTION_URI_DEFAULT = "postgres://postgres@localhost:6543/postgres"
 const PORT_DEFAULT = 9090
