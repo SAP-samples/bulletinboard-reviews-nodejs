@@ -2,7 +2,7 @@ import ExpressServer from './express-server.js'
 import PostgresReviewsService from './postgres-reviews-service.js'
 import logger from './logger.js'
 
-const DB_CONNECTION_URI_DEFAULT = "postgres://postgres@localhost:6543/postgres"
+const DB_CONNECTION_URI_DEFAULT = 'postgres://postgres@localhost:6543/postgres'
 const PORT_DEFAULT = 9090
 
 const dbUriCf = process.env.VCAP_SERVICES ? JSON.parse(process.env.VCAP_SERVICES).postgresql[0].credentials.uri : undefined
