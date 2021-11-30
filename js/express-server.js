@@ -20,7 +20,6 @@ class ExpressServer {
   }
 
   async start (port) {
-    // REVISE are we listening too early - what if the DB is not yet connected?
     this.#httpServer = this.#app.listen(port).on('error', function (error) {
       this.#logger.error(error.stack)
       process.exit(2)
