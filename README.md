@@ -1,70 +1,87 @@
-# bulletinboard-reviews
-This is the **Node.js** version of the reviews-service for the bulletin board application.
-Reviews of users can be created, deleted and viewed.
-You can interact with the service using a REST client like Postman or the GUI.
+# Bulletin Board - Reviews Service
 
-**Note:** Reviews refer to the _users_ that advertize things, _not_ the advertised things.
+## Description
 
-## How to work locally
+This is the reviews service for the bulletin board application. Reviews refer to the _users_ who advertise things, _not_ the advertised things. The server is written in Node.js. The client is written using Preact and SAP UI5 Web Components.
 
-To execute the tests or to start the service a local database is needed.
-The script `start-db.sh` can be used to start a local database (using Docker).
+## Requirements
 
-Also the dependencies need to be installed. Run `npm install` to install those.
+The following tools are required to run the service locally:
+- Node.js, v16 or later
+- Docker engine, v20 or later
+  - Alternatively, a PostgreSQL database, v9.6 or later
+- Optionally a Bourne shell
+  - Provided shell scripts make the startup easier
+  - Git bash is a good choice for Windows users
+## Local Setup
 
-### Execute tests
-The tests can be executed with npm: `npm test`
+- Start a pre-configured database using Docker: `./start-db.sh`
+  - If you want to start the database manually, or use your own PostgreSQL installation without Docker, have a look into the shell script to know the required configuration for version, database name, port, credentials and schema
+- Install the required dependencies: `npm ci`
+- Run the tests: `npm test`
+- Start the service: `npm start`
+  - The service will listen on port 9090
 
-### Start service locally
-Run `npm start` to start the service.
-The service will listen on port 9090.
-
-## A word on cloud readiness
+## Cloud Setup
 
 ### Cloud Foundry
-To speed a up the configuration for a deployment in Cloud Foundry a [manifest.yaml](manifest.yaml) with placeholders is provided.
+
+For a deployment on Cloud Foundry, a pre-configured [manifest.yaml](manifest.yaml) with placeholders is provided.
 
 ### Kubernetes
-For a deployment of the service in Kubernetes a pre-configured yaml-file ([k8s-minimal.yaml](k8s-minimal.yaml)) with placeholders is already part of the repository.
-Along with a basic [Dockerfile](Dockerfile).
 
-## Interact with the application
+For a deployment on Kubernetes, a pre-configured [k8s-minimal.yaml](k8s-minimal.yaml) with placeholders is provided, along with a basic [Dockerfile](Dockerfile).
 
-### Using the GUI
-Reviews for a user `[email]` can be made at `/#/reviews/:email`.
+## HTTP API
 
-### Using the API
-The following endpoints are supported and tested (remember to set the `application/json` content-type header):
-- `GET /api/v1/averageRatings/:email`: given the email of a user, get his/her average rating
-  Response: `200 OK`
-  Response Body:
-  ```
-    { "average_rating": <number> }
-  ```
+The following endpoints are supported and tested:
+- `GET /api/v1/averageRatings/:contact`: get the average rating of a given contact
+  - Response:
+    - `200 OK`
+  - Response Body:
+    ```
+      { "average_rating": <number> }
+    ```
 - `GET /api/v1/reviews`: get all reviews
-  Response: `200 OK`
-  Response Body:
-  ```
-    [
-        {
-            "reviewee_email": <text>, 
-            "reviewer_email": <text>, 
-            "rating": <integer>, 
-            "comment": <text>
-        },
-        ...
-    ]
-  ```
+  - Response:
+    - `200 OK`
+  - Response Body:
+    ```
+      [
+          {
+              "reviewee_email": <text>,
+              "reviewer_email": <text>,
+              "rating": <integer>,
+              "comment": <text>
+          },
+          ...
+      ]
+    ```
 - `POST /api/v1/reviews`: post a new review
-  Request Body:
-  ```
+  - Request Headers:
+    - `Content-Type: application/json`
+  - Request Body:
+    ```
     {
-        "reviewee_email": <text>, 
-        "reviewer_email": <text>, 
-        "rating": <integer>, 
-        "comment": <text>
+      "reviewee_email": <text>,
+      "reviewer_email": <text>,
+      "rating": <integer>,
+      "comment": <text>
     }
-  ```
-  Response: `201 Created`
+    ```
+  - Response:
+    - `204 No Content`
 - `DELETE /api/v1/reviews`: delete all reviews
-  Response: `204 No Content`
+  - Response:
+    - `204 No Content`
+
+## How to obtain support
+[Create an issue](https://github.com/SAP-samples/bulletinboard-reviews/issues) in this repository if you find a bug or have questions about the content.
+
+For additional support, [ask a question in SAP Community](https://answers.sap.com/questions/ask.html).
+
+## Contributing
+If you wish to contribute code, offer fixes or improvements, please send a pull request. Due to legal reasons, contributors will be asked to accept a DCO when they create the first pull request to this project. This happens in an automated fashion during the submission process. SAP uses [the standard DCO text of the Linux Foundation](https://developercertificate.org/).
+
+## License
+Copyright (c) 2021 SAP SE or an SAP affiliate company. All rights reserved. This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSES/Apache-2.0.txt) file.
