@@ -48,7 +48,7 @@ const Review = function (props) {
 
 // REVISE this needs revision, find a way to cleanly separate the entire dialog
 export default function ContactReviews(props) {
-  const [state, setState] = useState({ reviews: [], message: '', newReview: {} })
+  const [state, setState] = useState({ reviews: [], message: '', newReview: {}, messageFromCreation: '' })
   const dialog = useRef({})
 
   const loadReviews = async () => {
@@ -75,14 +75,26 @@ export default function ContactReviews(props) {
       </ui5-message-strip>`
     : ''
 
+  const clearMessageFromCreation = () => setState(oldState => ({ ...oldState, messageFromCreation: '' }))
+  const messageFromCreation = state.messageFromCreation
+    ? html`
+      <ui5-message-strip onclose=${clearMessageFromCreation} design='Negative' style='margin-top: 1rem;'>
+        ${state.messageFromCreation}
+      </ui5-message-strip>`
+    : ''
   const updateNewReview = (newReview) => { setState(oldState => ({ ...oldState, newReview })) }
   const saveNewReview = async () => {
-    await props.client.create(state.newReview)
-    await loadReviews()
-    dialog.current.close()
+    const messageFromCreation = await props.client.create(state.newReview)
+    if (messageFromCreation) {
+      setState(oldState => ({ ...oldState, messageFromCreation }))
+    } else {
+      await loadReviews()
+      dialog.current.close()
+    }
   }
   const dialogHtml = html`
     <ui5-dialog ref=${dialog} header-text='New Review for ${props.contact}'>
+      ${messageFromCreation}
       <${NewReviewForm} review=${state.newReview} onUpdateReview=${updateNewReview} />
       <div slot='footer' style='padding: .5rem'>
         <ui5-button icon='save' design='Emphasized' onclick=${saveNewReview}>Save</ui5-button>
