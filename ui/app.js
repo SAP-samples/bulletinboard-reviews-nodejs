@@ -6,18 +6,18 @@ import AllReviews from './all-reviews.js'
 
 // FIXME changing the hash does not reload the reviews
 const App = function (props) {
-    const [state, setState] = useState({ contact: location.hash.substring(2) })
+  const [state, setState] = useState({ contact: location.hash.substring(2) })
 
-    useEffect(() => {
-        addEventListener('hashchange', setStateFromUrl)
-        return () => removeEventListener('hashchange', setStateFromUrl)
-    }, [])
+  useEffect(() => {
+    addEventListener('hashchange', setStateFromUrl)
+    return () => removeEventListener('hashchange', setStateFromUrl)
+  }, [])
 
-    const setStateFromUrl = () => setState({ contact: location.hash.substring(2) })
+  const setStateFromUrl = () => setState({ contact: location.hash.substring(2) })
 
-    return state.contact 
-        ? html`<${ContactReviews} client=${props.client} contact=${state.contact} />`
-        : html`<${AllReviews} client=${props.client} />`
+  return state.contact
+    ? html`<${ContactReviews} client=${props.client} contact=${state.contact} />`
+    : html`<${AllReviews} client=${props.client} />`
 }
 
 export default App
