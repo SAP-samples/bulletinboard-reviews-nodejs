@@ -45,7 +45,7 @@ describe('Server', function () {
       reviewer_email: 'frank.foe@other.org',
       rating: 0,
       comment: "d'oh"
-    }).expect(201)
+    }).expect(204)
 
     await baseUrl.get('/api/v1/reviews').expect(200).then(function (response) {
       const reviews = response.body
@@ -79,14 +79,15 @@ describe('Server', function () {
       reviewer_email: 'frank.foe@other.org',
       rating: 0,
       comment: "d'oh"
-    }).expect(201)
+    }).expect(204)
 
     await baseUrl.post('/api/v1/reviews').send({
       reviewee_email: 'jane.doe@some.org',
       reviewer_email: 'jane.joe@acme.org',
       rating: 5,
       comment: 'cool person'
-    }).expect(201)
+    }).expect(204)
+
     await baseUrl.get('/api/v1/reviews/john.doe@some.org')
       .expect(200).expect('Content-Type', /application\/json/)
       .then(function (response) {
@@ -102,14 +103,14 @@ describe('Server', function () {
       reviewer_email: 'frank.foe@other.org',
       rating: 0,
       comment: "d'oh"
-    }).expect(201)
+    }).expect(204)
 
     await baseUrl.post('/api/v1/reviews').send({
       reviewee_email: 'john.doe@some.org',
       reviewer_email: 'jane.joe@acme.org',
       rating: 5,
       comment: 'cool guy'
-    }).expect(201)
+    }).expect(204)
 
     await baseUrl.get('/api/v1/averageRatings/john.doe@some.org').expect(200).then(function (response) {
       const averageRating = response.body

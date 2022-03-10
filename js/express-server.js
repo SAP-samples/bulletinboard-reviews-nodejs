@@ -2,7 +2,6 @@ import express from 'express'
 import logger from './logger.js'
 
 const HTTP_NO_CONTENT = 204
-const HTTP_CREATED = 201
 const HTTP_CONFLICT = 409
 const INTERNAL_SERVER_ERROR = 500
 
@@ -62,7 +61,7 @@ class ExpressServer {
       } catch (err) {
         return res.status(HTTP_CONFLICT).end()
       }
-      res.status(HTTP_CREATED).location(req.body.component_name).end()
+      res.status(HTTP_NO_CONTENT).end()
     }))
 
     this.#app.delete('/api/v1/reviews', wrap(async (req, res) => {
