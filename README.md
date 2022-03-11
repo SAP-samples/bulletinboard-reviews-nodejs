@@ -2,7 +2,7 @@
 
 ## Description
 
-This is the reviews service for the bulletin board application. Reviews refer to the _users_ who advertise things, _not_ the advertised things. The server is written in Node.js. The client is written using Preact and SAP UI5 Web Components.
+This is the reviews service for the bulletin board application. Reviews refer to the _users_ who advertise things, _not_ the advertised things. The server is written in Node.js. The client is written using Preact and SAP UI5 Web Components. The purpose of this application is to demonstrate Microservice development and related tradeoffs. In particular, the service bulletinboard-ads is tightly coupled to this service, through a synchronous HTTP call to an API for a very specific feature that the advertisements service needs. This is a typical pitfall in Microservice development and can be mitigated by leveraging eventual consistency & asynchronous communication.
 
 ## Requirements
 
@@ -13,6 +13,7 @@ The following tools are required to run the service locally:
 - Optionally a Bourne shell
   - Provided shell scripts make the startup easier
   - Git bash is a good choice for Windows users
+
 ## Local Setup
 
 - Start a pre-configured database using Docker: `./start-db.sh`
