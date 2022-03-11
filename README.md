@@ -40,22 +40,22 @@ The following endpoints are supported and tested:
     - `200 OK`
   - Response Body:
     ```
-      { "average_rating": <number> }
+    { "average_rating": <number> }
     ```
 - `GET /api/v1/reviews`: get all reviews
   - Response:
     - `200 OK`
   - Response Body:
     ```
-      [
-          {
-              "reviewee_email": <text>,
-              "reviewer_email": <text>,
-              "rating": <integer>,
-              "comment": <text>
-          },
-          ...
-      ]
+    [
+      {
+          "reviewee_email": <text>,
+          "reviewer_email": <text>,
+          "rating": <integer>,
+          "comment": <text>
+      },
+      ...
+    ]
     ```
 - `POST /api/v1/reviews`: post a new review
   - Request Headers:
