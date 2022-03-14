@@ -1,3 +1,5 @@
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/bulletinboard-reviews-nodejs)](https://api.reuse.software/info/github.com/SAP-samples/bulletinboard-reviews-nodejs)
+
 # Bulletin Board - Reviews Service
 
 ## Description
