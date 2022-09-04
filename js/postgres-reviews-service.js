@@ -12,9 +12,9 @@ class PostgresReviewsService {
         "comment" VARCHAR (1024),
         PRIMARY KEY ("reviewee_email", "reviewer_email"))`
 
-  constructor (dbConnectionUri, logger) {
+  constructor (config, logger) {
     this.#logger = logger
-    this.#pool = new pg.Pool({ connectionString: dbConnectionUri })
+    this.#pool = new pg.Pool(config)
     this.#tableInitialized = this.#pool.query(this.#CREATE_SQL).then(() => {
       this.#logger.info('Database connection established')
     }).catch((error) => {
