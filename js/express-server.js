@@ -1,5 +1,7 @@
 import express from 'express'
 import logger from './logger.js'
+import { WebSocketServer } from 'ws'
+import { createServer } from 'http'
 
 const HTTP_NO_CONTENT = 204
 const HTTP_CONFLICT = 409
@@ -8,30 +10,33 @@ const INTERNAL_SERVER_ERROR = 500
 class ExpressServer {
   #app
   #httpServer
+  #wss
   #reviewsService
   #logger
 
-  constructor (reviewsService, logger) {
+  constructor(reviewsService, logger) {
     this.#reviewsService = reviewsService
     this.#logger = logger
     this.#app = express()
+    this.#httpServer = createServer(this.#app)
+    this.#wss = new WebSocketServer({ server: this.#httpServer })
     this.#setupRoutesAndMiddlewares()
   }
 
-  async start (port) {
-    this.#httpServer = this.#app.listen(port).on('error', function (error) {
+  async start(port) {
+    this.#httpServer.listen(port).on('error', function (error) {
       this.#logger.error(error.stack)
       process.exit(2)
     })
     this.#logger.info(`Server started on port ${port}`)
   }
 
-  async stop () {
+  async stop() {
     await this.#reviewsService.stop()
     this.#httpServer.close()
   }
 
-  #setupRoutesAndMiddlewares () {
+  #setupRoutesAndMiddlewares() {
     this.#app.use(express.json())
 
     this.#app.use(express.static('ui'))
